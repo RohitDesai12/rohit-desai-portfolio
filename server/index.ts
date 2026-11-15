@@ -98,6 +98,52 @@ app.get('/api/auth/verify', requireAuth, (req: Request, res: Response) => {
   res.json({ valid: true, user: (req as any).user });
 });
 
+// Protected: Change administrator password
+app.post('/api/auth/change-password', requireAuth, (req: Request, res: Response) => {
+  const { currentPassword, newPassword } = req.body;
+  if (!currentPassword || !newPassword) {
+    res.status(400).json({ error: 'Current password and new password are required' });
+    return;
+  }
+
+  // Reload env
+  dotenv.config({ override: true });
+  const currentUser = (req as any).user?.username || process.env.ADMIN_USERNAME || 'rohit';
+  const isValid = verifyCredentials(currentUser, currentPassword);
+  if (!isValid) {
+    res.status(401).json({ error: 'Current password is incorrect' });
+    return;
+  }
+
+  if (typeof newPassword !== 'string' || newPassword.trim().length < 4) {
+    res.status(400).json({ error: 'New password must be at least 4 characters long' });
+    return;
+  }
+
+  try {
+    const envPath = path.join(__dirname, '..', '.env');
+    let envContent = '';
+    if (fs.existsSync(envPath)) {
+      envContent = fs.readFileSync(envPath, 'utf8');
+    }
+
+    const trimmedPassword = newPassword.trim();
+    if (/ADMIN_PASSWORD=.*/.test(envContent)) {
+      envContent = envContent.replace(/ADMIN_PASSWORD=.*/, `ADMIN_PASSWORD=${trimmedPassword}`);
+    } else {
+      envContent += `\nADMIN_PASSWORD=${trimmedPassword}\n`;
+    }
+
+    fs.writeFileSync(envPath, envContent, 'utf8');
+    process.env.ADMIN_PASSWORD = trimmedPassword;
+    dotenv.config({ override: true });
+
+    res.json({ success: true, message: 'Password updated successfully! You can now use your new password.' });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Failed to write updated password to .env', details: err.message });
+  }
+});
+
 // Protected: Update section
 app.put('/api/content/:section', requireAuth, (req: Request, res: Response) => {
   const section = req.params.section as keyof PortfolioDatabase;

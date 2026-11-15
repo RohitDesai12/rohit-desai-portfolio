@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { ShieldCheck, Trophy, Sparkles, Eye, FileText } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { CertificationItem } from '../data/certifications';
@@ -38,7 +39,13 @@ export const CertificationsSection: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           {/* Group 1: Certifications & Training (7 cols) */}
-          <div className="lg:col-span-7 space-y-6">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-7 space-y-6"
+          >
             <div className="flex items-center justify-between border-b border-[#DDDFD8] pb-3">
               <div className="flex items-center gap-2 text-xs font-mono uppercase text-[#285943] font-semibold tracking-wider">
                 <ShieldCheck size={16} />
@@ -50,10 +57,15 @@ export const CertificationsSection: React.FC = () => {
             </div>
 
             <div className="space-y-4">
-              {visibleCertifications.map((cert) => (
-                <div
+              {visibleCertifications.map((cert, cIdx) => (
+                <motion.div
                   key={cert.id}
-                  className="border border-[#DDDFD8] bg-[#E8EEE8]/40 p-6 space-y-4 hover:border-[#285943]/40 transition-colors"
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.45, delay: cIdx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                  whileHover={{ y: -2 }}
+                  className="border border-[#DDDFD8] bg-[#E8EEE8]/40 p-6 space-y-4 hover:border-[#285943]/50 transition-colors shadow-xs"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
@@ -116,13 +128,19 @@ export const CertificationsSection: React.FC = () => {
                       )}
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Group 2: Achievements & Activities (5 cols) */}
-          <div className="lg:col-span-5 space-y-6">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.55, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5 space-y-6"
+          >
             <div className="flex items-center justify-between border-b border-[#DDDFD8] pb-3">
               <div className="flex items-center gap-2 text-xs font-mono uppercase text-[#285943] font-semibold tracking-wider">
                 <Trophy size={16} />
@@ -132,10 +150,15 @@ export const CertificationsSection: React.FC = () => {
             </div>
 
             <div className="space-y-4">
-              {achievements.map((achievement) => (
-                <div
+              {achievements.map((achievement, aIdx) => (
+                <motion.div
                   key={achievement.id}
-                  className="border border-[#DDDFD8] bg-[#F7F7F2] p-6 space-y-3 hover:border-[#285943]/40 transition-colors"
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.45, delay: aIdx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                  whileHover={{ y: -2 }}
+                  className="border border-[#DDDFD8] bg-[#F7F7F2] p-6 space-y-3 hover:border-[#285943]/40 transition-colors shadow-xs"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <h3 className="text-base font-bold font-heading text-[#202522]">
@@ -160,10 +183,10 @@ export const CertificationsSection: React.FC = () => {
                       <span>{achievement.impactHighlight}</span>
                     </div>
                   )}
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Global Certificate & Result Viewer Modal (In-website view only; no download button) */}

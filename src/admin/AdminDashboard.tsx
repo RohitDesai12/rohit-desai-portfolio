@@ -8,6 +8,7 @@ import { AchievementsTab } from './tabs/AchievementsTab';
 import { SkillsTab } from './tabs/SkillsTab';
 import { EducationTab } from './tabs/EducationTab';
 import { VisibilityTab } from './tabs/VisibilityTab';
+import { SecurityTab } from './tabs/SecurityTab';
 
 export const AdminDashboard: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -79,6 +80,7 @@ export const AdminDashboard: React.FC = () => {
         {activeTab === 'skills' && <SkillsTab />}
         {activeTab === 'education' && <EducationTab />}
         {activeTab === 'visibility' && <VisibilityTab />}
+        {activeTab === 'security' && <SecurityTab />}
       </main>
 
       <footer className="border-t border-[#DDDFD8] py-4 bg-[#F7F7F2] text-center text-xs font-mono text-[#777D78]">

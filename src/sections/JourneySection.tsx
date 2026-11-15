@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Calendar, MapPin } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Container } from '../components/common/Container';
@@ -18,12 +19,19 @@ export const JourneySection: React.FC = () => {
         />
 
         <div className="relative border-l border-[#DDDFD8] ml-3 sm:ml-6 pl-6 sm:pl-10 space-y-12">
-          {education.map((item) => (
-            <div key={item.id} className="relative group">
+          {education.map((item, idx) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, x: -16 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.55, delay: idx * 0.12, ease: [0.16, 1, 0.3, 1] }}
+              className="relative group"
+            >
               {/* Timeline Marker Dot */}
               <div className="absolute -left-[31px] sm:-left-[47px] top-1.5 w-3.5 h-3.5 rounded-full bg-[#F7F7F2] border-2 border-[#285943] transition-colors group-hover:bg-[#285943]" />
 
-              <div className="border border-[#DDDFD8] bg-[#F7F7F2] p-6 sm:p-8 hover:border-[#285943]/40 transition-colors">
+              <div className="border border-[#DDDFD8] bg-[#F7F7F2] p-6 sm:p-8 hover:border-[#285943]/40 transition-all duration-300 shadow-xs">
                 {/* Header Row: Duration & Score */}
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#DDDFD8] pb-3 mb-4">
                   <div className="flex items-center gap-2 font-mono text-xs text-[#285943] font-semibold">
@@ -65,7 +73,7 @@ export const JourneySection: React.FC = () => {
                   </ul>
                 )}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </Container>

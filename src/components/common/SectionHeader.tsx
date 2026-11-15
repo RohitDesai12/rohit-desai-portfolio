@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { cn } from '../../utils/cn';
 
 interface SectionHeaderProps {
@@ -19,7 +20,11 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   align = 'left',
 }) => {
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
         'mb-12 md:mb-16',
         align === 'center' ? 'text-center max-w-2xl mx-auto' : 'max-w-3xl',
@@ -45,7 +50,13 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
         </p>
       )}
 
-      <div className="mt-6 w-12 h-[2px] bg-[#285943]" />
-    </div>
+      <motion.div
+        initial={{ width: 0 }}
+        whileInView={{ width: 48 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        className={cn('mt-6 h-[2px] bg-[#285943]', align === 'center' && 'mx-auto')}
+      />
+    </motion.div>
   );
 };

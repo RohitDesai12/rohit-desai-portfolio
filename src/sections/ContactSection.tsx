@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Linkedin, Github, Send, ArrowUpRight, Copy, Check } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Container } from '../components/common/Container';
@@ -61,7 +62,13 @@ export const ContactSection: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           {/* Direct Channels (5 cols) */}
-          <div className="lg:col-span-5 space-y-8">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5 space-y-8"
+          >
             <div className="border border-[#DDDFD8] bg-[#E8EEE8] p-6 sm:p-8 space-y-6">
               <div className="font-mono text-xs uppercase text-[#285943] font-semibold tracking-wider border-b border-[#DDDFD8] pb-3">
                 DIRECT CONTACT CHANNELS
@@ -143,10 +150,16 @@ export const ContactSection: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Form (7 cols) */}
-          <div className="lg:col-span-7">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.55, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-7"
+          >
             <div className="border border-[#DDDFD8] bg-[#F7F7F2] p-6 sm:p-8">
               <div className="border-b border-[#DDDFD8] pb-3 mb-6 flex items-center justify-between">
                 <div className="font-mono text-xs uppercase text-[#285943] font-semibold tracking-wider">
@@ -254,7 +267,7 @@ export const ContactSection: React.FC = () => {
                 </div>
               </form>
             </div>
-          </div>
+          </motion.div>
         </div>
       </Container>
     </section>

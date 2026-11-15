@@ -102,8 +102,9 @@
         "accentColor": "#285943",
         "diagramType": "neural-network"
       },
-      "githubUrl": "",
-      "demoUrl": ""
+      "githubUrl": "https://github.com/RohitDesai12/ai-career-recommendation-system",
+      "demoUrl": "https://career-compass-pi-blush.vercel.app",
+      "previewImage": ""
     },
     {
       "id": "ai-agri-closed-loop",

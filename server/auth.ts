@@ -29,6 +29,9 @@ export function generateToken(username: string): string {
 }
 
 export function verifyCredentials(username: string, password: string): boolean {
+  // Always dynamically reload .env with override: true so any manual edits or changes take effect immediately
+  dotenv.config({ override: true });
+
   const envUsername = process.env.ADMIN_USERNAME;
   const envPassword = process.env.ADMIN_PASSWORD;
 

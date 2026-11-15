@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { GraduationCap, Code2, Cpu } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Container } from '../components/common/Container';
@@ -20,7 +21,13 @@ export const AboutSection: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           {/* Left Column: Narrative & Technical Philosophy (7 cols) */}
-          <div className="lg:col-span-7 space-y-6 text-[#202522]">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-7 space-y-6 text-[#202522]"
+          >
             <p className="text-lg sm:text-xl font-medium leading-relaxed font-heading text-[#202522]">
               I am a Computer Science Engineering student focused on building dependable, scalable software systems, clean backend services, and practical applications of machine learning.
             </p>
@@ -44,7 +51,11 @@ export const AboutSection: React.FC = () => {
 
             {/* Core Pillars */}
             <div className="pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 bg-[#E8EEE8]/40 border border-[#DDDFD8]">
+              <motion.div
+                whileHover={{ y: -3 }}
+                transition={{ duration: 0.2 }}
+                className="p-4 bg-[#E8EEE8]/40 border border-[#DDDFD8] transition-colors hover:border-[#285943]/50"
+              >
                 <div className="flex items-center gap-2 text-xs font-mono uppercase text-[#285943] font-semibold mb-2">
                   <Code2 size={16} />
                   <span>Systems & APIs</span>
@@ -52,9 +63,13 @@ export const AboutSection: React.FC = () => {
                 <p className="text-xs text-[#777D78] leading-relaxed">
                   Designing structured RESTful endpoints, MVC service boundaries, and robust error-handling pipelines.
                 </p>
-              </div>
+              </motion.div>
 
-              <div className="p-4 bg-[#E8EEE8]/40 border border-[#DDDFD8]">
+              <motion.div
+                whileHover={{ y: -3 }}
+                transition={{ duration: 0.2 }}
+                className="p-4 bg-[#E8EEE8]/40 border border-[#DDDFD8] transition-colors hover:border-[#285943]/50"
+              >
                 <div className="flex items-center gap-2 text-xs font-mono uppercase text-[#285943] font-semibold mb-2">
                   <Cpu size={16} />
                   <span>Applied AI / ML</span>
@@ -62,13 +77,19 @@ export const AboutSection: React.FC = () => {
                 <p className="text-xs text-[#777D78] leading-relaxed">
                   Integrating NLP workflows, feature extraction, and predictive models into user-facing web tools.
                 </p>
-              </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Academic Specification Panel (5 cols) */}
-          <div className="lg:col-span-5">
-            <div className="border border-[#DDDFD8] bg-[#E8EEE8] p-6 sm:p-8">
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5"
+          >
+            <div className="border border-[#DDDFD8] bg-[#E8EEE8] p-6 sm:p-8 hover:border-[#285943]/40 transition-colors">
               <div className="flex items-center justify-between border-b border-[#DDDFD8] pb-4 mb-6">
                 <div className="flex items-center gap-2 text-xs font-mono text-[#285943] uppercase tracking-wider font-semibold">
                   <GraduationCap size={16} />
@@ -129,7 +150,7 @@ export const AboutSection: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </Container>
     </section>

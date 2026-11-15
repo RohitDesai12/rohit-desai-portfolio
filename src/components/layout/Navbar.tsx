@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { Menu, X, FileDown } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { Button } from '../common/Button';
@@ -10,6 +10,13 @@ export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('home');
+
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   // Track scroll position for backdrop blur and section spy
   useEffect(() => {
@@ -61,6 +68,12 @@ export const Navbar: React.FC = () => {
           : 'bg-[#F7F7F2]/60 backdrop-blur-xs py-5'
       )}
     >
+      {/* Scroll Progress Indicator */}
+      <motion.div
+        className="absolute top-0 left-0 right-0 h-[2px] bg-[#285943] origin-left"
+        style={{ scaleX }}
+      />
+
       <div className="max-w-6xl mx-auto px-5 sm:px-8 md:px-12 flex items-center justify-between">
         {/* Monogram Brand */}
         <a
@@ -93,7 +106,11 @@ export const Navbar: React.FC = () => {
               >
                 {item.label}
                 {isActive && (
-                  <span className="absolute bottom-0 left-3 right-3 h-[2px] bg-[#285943]" />
+                  <motion.span
+                    layoutId="activeNavIndicator"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#285943]"
+                  />
                 )}
               </a>
             );

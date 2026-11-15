@@ -23,6 +23,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
     { id: 'skills', label: 'Skills' },
     { id: 'education', label: 'Education' },
     { id: 'visibility', label: 'Section Visibility' },
+    { id: 'security', label: 'Security & Password' },
   ];
 
   return (

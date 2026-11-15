@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { ArrowUpRight, Github, FileText, CheckCircle2 } from 'lucide-react';
 import { ProjectItem } from '../../data/projects';
 import { Badge } from '../common/Badge';
@@ -20,7 +21,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   const isReversed = index % 2 === 1;
 
   return (
-    <article className="w-full max-w-full overflow-hidden border border-[#DDDFD8] bg-[#F7F7F2] p-4 sm:p-6 md:p-8 lg:p-10 transition-all duration-300 hover:border-[#285943]/40">
+    <motion.article
+      initial={{ opacity: 0, y: 36 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.65, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+      className="w-full max-w-full overflow-hidden border border-[#DDDFD8] bg-[#F7F7F2] p-4 sm:p-6 md:p-8 lg:p-10 transition-all duration-300 hover:border-[#285943]/60 hover:shadow-xs"
+    >
       <div
         className={cn(
           'grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center',
@@ -216,6 +223,6 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 };
