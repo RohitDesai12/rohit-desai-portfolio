@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Plus, Edit2, Trash2, ArrowUp, ArrowDown, Save, X, CheckCircle2, AlertCircle, FileText } from 'lucide-react';
+import { Plus, Edit2, Trash2, ArrowUp, ArrowDown, Save, X, CheckCircle2, AlertCircle, FileText, Upload, Image as ImageIcon } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { ProjectItem } from '../../data/projects';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
 import { ConfirmModal } from '../components/ConfirmModal';
-import { FileUploadInput } from '../components/FileUploadInput';
 
 export const ProjectsTab: React.FC = () => {
   const { projects, updateSection } = usePortfolio();
@@ -15,11 +14,97 @@ export const ProjectsTab: React.FC = () => {
   const [deleteTarget, setDeleteTarget] = useState<ProjectItem | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [isUploadingImages, setIsUploadingImages] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [manualImageUrl, setManualImageUrl] = useState('');
 
   // Synchronize when context projects update
   React.useEffect(() => {
     setProjectList(projects);
   }, [projects]);
+
+  const handleBatchImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0 || !editingProject) return;
+
+    setIsUploadingImages(true);
+    setUploadError(null);
+
+    const token = localStorage.getItem('rohit_portfolio_admin_token');
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i]);
+    }
+
+    try {
+      const res = await fetch('/api/upload-multiple', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to upload images');
+      }
+
+      const currentImages = editingProject.images || (editingProject.previewImage ? [editingProject.previewImage] : []);
+      const newImages = [...currentImages, ...data.urls];
+
+      setEditingProject({
+        ...editingProject,
+        images: newImages,
+        previewImage: newImages[0] || '',
+      });
+    } catch (err: any) {
+      setUploadError(err.message || 'Image upload failed');
+    } finally {
+      setIsUploadingImages(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleAddManualImage = () => {
+    if (!manualImageUrl.trim() || !editingProject) return;
+    const currentImages = editingProject.images || (editingProject.previewImage ? [editingProject.previewImage] : []);
+    const newImages = [...currentImages, manualImageUrl.trim()];
+    setEditingProject({
+      ...editingProject,
+      images: newImages,
+      previewImage: newImages[0] || '',
+    });
+    setManualImageUrl('');
+  };
+
+  const handleRemoveImage = (index: number) => {
+    if (!editingProject) return;
+    const currentImages = editingProject.images || (editingProject.previewImage ? [editingProject.previewImage] : []);
+    const updated = currentImages.filter((_, i) => i !== index);
+    setEditingProject({
+      ...editingProject,
+      images: updated,
+      previewImage: updated[0] || '',
+    });
+  };
+
+  const handleMoveImage = (index: number, direction: 'up' | 'down') => {
+    if (!editingProject) return;
+    const currentImages = [...(editingProject.images || (editingProject.previewImage ? [editingProject.previewImage] : []))];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= currentImages.length) return;
+
+    const temp = currentImages[index];
+    currentImages[index] = currentImages[targetIndex];
+    currentImages[targetIndex] = temp;
+
+    setEditingProject({
+      ...editingProject,
+      images: currentImages,
+      previewImage: currentImages[0] || '',
+    });
+  };
 
   const handleOpenAdd = () => {
     const nextNumber = String(projectList.length + 1).padStart(2, '0');
@@ -34,6 +119,8 @@ export const ProjectsTab: React.FC = () => {
       technologies: [],
       keyFeatures: [],
       myContribution: [],
+      images: [],
+      previewImage: '',
       caseStudy: {
         problem: '',
         objective: '',
@@ -408,13 +495,137 @@ export const ProjectsTab: React.FC = () => {
                 </div>
               </div>
 
-              <FileUploadInput
-                label="Optional Screenshot Image Upload"
-                value={editingProject.previewImage}
-                accept="image/*"
-                onChange={(url) => setEditingProject({ ...editingProject, previewImage: url })}
-                helperText="Upload a screenshot PNG/JPG or leave blank to automatically use the editorial schematic diagram."
-              />
+              {/* Multi-Screenshot Gallery (Supports up to 10+ images with Auto-play & Carousel) */}
+              <div className="border border-[#DDDFD8] bg-[#E8EEE8]/40 p-4 sm:p-5 space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#DDDFD8] pb-3">
+                  <div className="flex items-center gap-2">
+                    <ImageIcon size={16} className="text-[#285943]" />
+                    <h4 className="font-mono text-xs uppercase text-[#285943] font-semibold">
+                      Project Screenshots & Carousel (Supports 10+ Images)
+                    </h4>
+                  </div>
+                  <span className="text-[11px] font-mono text-[#777D78]">
+                    {(editingProject.images || (editingProject.previewImage ? [editingProject.previewImage] : [])).length} Images Uploaded
+                  </span>
+                </div>
+
+                <p className="text-xs text-[#777D78] leading-relaxed">
+                  Upload multiple screenshots for this project (supports at least 10 images). On the live portfolio, they will automatically cycle as an interactive slideshow with left/right arrows. <strong className="text-[#202522]">If no images are uploaded, the project will automatically display the architectural schematic diagram.</strong>
+                </p>
+
+                {uploadError && (
+                  <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs font-mono flex items-center gap-2">
+                    <AlertCircle size={14} className="shrink-0" />
+                    <span>{uploadError}</span>
+                  </div>
+                )}
+
+                {/* Upload Buttons & Manual Add */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                  <label className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#285943] text-[#F7F7F2] hover:bg-[#1E4332] text-xs font-mono uppercase tracking-wider font-semibold cursor-pointer rounded-xs transition-colors shrink-0">
+                    <Upload size={14} className={isUploadingImages ? 'animate-bounce' : ''} />
+                    <span>{isUploadingImages ? 'Uploading Images...' : 'Upload Images (Select Multiple)'}</span>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={handleBatchImageUpload}
+                      disabled={isUploadingImages}
+                      className="hidden"
+                    />
+                  </label>
+
+                  <div className="flex flex-1 items-center gap-2">
+                    <input
+                      type="text"
+                      value={manualImageUrl}
+                      onChange={(e) => setManualImageUrl(e.target.value)}
+                      placeholder="Or paste image URL (/assets/... or https://...)"
+                      className="flex-1 px-3 py-2 bg-[#F7F7F2] border border-[#DDDFD8] text-xs font-mono focus:border-[#285943] focus:outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddManualImage}
+                      disabled={!manualImageUrl.trim()}
+                      className="px-3 py-2 bg-[#E8EEE8] border border-[#DDDFD8] hover:border-[#285943] text-xs font-mono text-[#202522] disabled:opacity-40 rounded-xs cursor-pointer"
+                    >
+                      Add URL
+                    </button>
+                  </div>
+                </div>
+
+                {/* Image List Preview Grid */}
+                {(() => {
+                  const currentImages = editingProject.images || (editingProject.previewImage ? [editingProject.previewImage] : []);
+                  if (currentImages.length === 0) {
+                    return (
+                      <div className="p-4 border border-dashed border-[#DDDFD8] text-center text-xs font-mono text-[#777D78] bg-[#F7F7F2]">
+                        No screenshots uploaded yet. The editorial schematic diagram will be shown by default.
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div className="space-y-2 pt-2">
+                      <span className="block font-mono text-[11px] uppercase text-[#777D78]">
+                        Re-order & Manage Slideshow Sequence:
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                        {currentImages.map((imgUrl, imgIdx) => (
+                          <div
+                            key={imgIdx}
+                            className="border border-[#DDDFD8] bg-[#F7F7F2] p-2 flex flex-col justify-between space-y-2 shadow-xs group"
+                          >
+                            <div className="relative aspect-[16/10] bg-[#202522]/5 overflow-hidden border border-[#DDDFD8]/60 flex items-center justify-center">
+                              <img
+                                src={imgUrl}
+                                alt={`Screenshot ${imgIdx + 1}`}
+                                className="w-full h-full object-contain"
+                              />
+                              <span className="absolute top-1 left-1 bg-[#202522]/80 text-[#F7F7F2] text-[10px] font-mono px-1.5 py-0.5 rounded-xs">
+                                #{imgIdx + 1} {imgIdx === 0 ? '(Cover)' : ''}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center justify-between gap-1 pt-1 border-t border-[#DDDFD8]/60">
+                              <div className="flex items-center gap-1">
+                                <button
+                                  type="button"
+                                  onClick={() => handleMoveImage(imgIdx, 'up')}
+                                  disabled={imgIdx === 0}
+                                  className="p-1 text-[#777D78] hover:text-[#202522] disabled:opacity-30 rounded-xs hover:bg-[#E8EEE8] cursor-pointer"
+                                  title="Move Left / Earlier"
+                                >
+                                  <ArrowUp size={13} className="-rotate-90" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleMoveImage(imgIdx, 'down')}
+                                  disabled={imgIdx === currentImages.length - 1}
+                                  className="p-1 text-[#777D78] hover:text-[#202522] disabled:opacity-30 rounded-xs hover:bg-[#E8EEE8] cursor-pointer"
+                                  title="Move Right / Later"
+                                >
+                                  <ArrowDown size={13} className="-rotate-90" />
+                                </button>
+                              </div>
+
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveImage(imgIdx)}
+                                className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-xs transition-colors flex items-center gap-1 text-[11px] font-mono cursor-pointer"
+                                title="Remove screenshot"
+                              >
+                                <Trash2 size={13} />
+                                <span>Remove</span>
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
 
               {/* 8-Section Case Study Details */}
               <div className="border-t border-[#DDDFD8] pt-6 space-y-4">

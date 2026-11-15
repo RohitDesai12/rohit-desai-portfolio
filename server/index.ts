@@ -194,6 +194,28 @@ app.post('/api/upload', requireAuth, upload.single('file'), (req: Request, res: 
   });
 });
 
+// Protected: Batch upload multiple files (up to 15 files at once)
+app.post('/api/upload-multiple', requireAuth, upload.array('files', 15), (req: Request, res: Response) => {
+  const files = (req.files as Express.Multer.File[]) || [];
+  if (files.length === 0) {
+    res.status(400).json({ error: 'No files uploaded' });
+    return;
+  }
+
+  const results = files.map((file) => ({
+    url: `/assets/uploads/${file.filename}`,
+    filename: file.filename,
+    originalName: file.originalname,
+    size: file.size,
+  }));
+
+  res.json({
+    success: true,
+    files: results,
+    urls: results.map((r) => r.url),
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Portfolio Admin Backend listening on http://localhost:${PORT}`);
 });

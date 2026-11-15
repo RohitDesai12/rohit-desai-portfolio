@@ -4,6 +4,7 @@ import { ArrowUpRight, Github, FileText, CheckCircle2 } from 'lucide-react';
 import { ProjectItem } from '../../data/projects';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
+import { ProjectImageCarousel } from './ProjectImageCarousel';
 import { cn } from '../../utils/cn';
 
 interface ProjectCardProps {
@@ -19,6 +20,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 }) => {
   // Alternating layout: even index = preview left, odd index = preview right
   const isReversed = index % 2 === 1;
+
+  // Resolve images: check project.images array first, then fallback to single previewImage
+  const projectImages = (project.images && project.images.length > 0)
+    ? project.images
+    : (project.previewImage ? [project.previewImage] : []);
+  const hasImages = projectImages.length > 0;
 
   return (
     <motion.article
@@ -46,14 +53,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               <span className="shrink-0 text-[10px] sm:text-xs">{project.timeline}</span>
             </div>
 
-            {/* Visual Content: Custom Screenshot or Responsive Schematic */}
-            {project.previewImage ? (
-              <div className="my-auto py-3 w-full h-full flex items-center justify-center overflow-hidden">
-                <img
-                  src={project.previewImage}
-                  alt={`${project.title} Preview`}
-                  className="w-full max-h-[220px] object-cover border border-[#DDDFD8] shadow-xs transition-transform duration-300 group-hover:scale-102"
-                  loading="lazy"
+            {/* Visual Content: Custom Screenshot Carousel or Responsive Schematic */}
+            {hasImages ? (
+              <div className="my-auto py-2 w-full h-full flex items-center justify-center overflow-hidden">
+                <ProjectImageCarousel
+                  images={projectImages}
+                  projectTitle={project.title}
                 />
               </div>
             ) : (

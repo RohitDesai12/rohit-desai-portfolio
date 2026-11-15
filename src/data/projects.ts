@@ -20,6 +20,7 @@ export interface ProjectItem {
   myContribution: string[];
   caseStudy: CaseStudySection;
   previewImage?: string;
+  images?: string[]; // Multiple screenshots (supports up to 10+ images with interactive carousel)
   placeholderTheme: {
     accentColor: string;
     diagramType: "neural-network" | "sensor-pipeline";

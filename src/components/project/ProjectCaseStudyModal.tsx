@@ -4,6 +4,7 @@ import { X, Github, Layers, ArrowUpRight, CheckCircle2, AlertCircle } from 'luci
 import { ProjectItem } from '../../data/projects';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
+import { ProjectImageCarousel } from './ProjectImageCarousel';
 
 interface ProjectCaseStudyModalProps {
   project: ProjectItem | null;
@@ -38,6 +39,9 @@ export const ProjectCaseStudyModal: React.FC<ProjectCaseStudyModalProps> = ({
   if (!project) return null;
 
   const { caseStudy } = project;
+  const projectImages = (project.images && project.images.length > 0)
+    ? project.images
+    : (project.previewImage ? [project.previewImage] : []);
 
   return (
     <AnimatePresence>
@@ -129,6 +133,20 @@ export const ProjectCaseStudyModal: React.FC<ProjectCaseStudyModalProps> = ({
                         Live Demonstration
                       </Button>
                     )}
+                  </div>
+                )}
+
+                {/* Screenshots Carousel if uploaded */}
+                {projectImages.length > 0 && (
+                  <div className="mt-6 border border-[#DDDFD8] bg-[#E8EEE8] p-3 sm:p-4">
+                    <div className="font-mono text-xs uppercase text-[#285943] font-semibold mb-2 flex items-center justify-between">
+                      <span>PROJECT INTERFACE & SYSTEM SCREENSHOTS</span>
+                      <span className="text-[#777D78]">{projectImages.length} Screenshots</span>
+                    </div>
+                    <ProjectImageCarousel
+                      images={projectImages}
+                      projectTitle={project.title}
+                    />
                   </div>
                 )}
               </div>
