@@ -1,0 +1,34 @@
+import React from 'react';
+import { cn } from '../../utils/cn';
+
+interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+  className?: string;
+  size?: 'default' | 'narrow' | 'wide';
+}
+
+export const Container: React.FC<ContainerProps> = ({
+  children,
+  className,
+  size = 'default',
+  ...props
+}) => {
+  const sizeClasses = {
+    narrow: 'max-w-4xl',
+    default: 'max-w-6xl',
+    wide: 'max-w-7xl',
+  };
+
+  return (
+    <div
+      className={cn(
+        'mx-auto px-5 sm:px-8 md:px-12 w-full',
+        sizeClasses[size],
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};

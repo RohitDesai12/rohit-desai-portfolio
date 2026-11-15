@@ -1,0 +1,440 @@
+{
+  "personal": {
+    "fullName": "Rohit Ramkrishna Desai",
+    "displayName": "Rohit Desai",
+    "monogram": "RD",
+    "professionalRole": "Software Developer | AI/ML Enthusiast",
+    "tagline": "I build practical software applications and intelligent systems through programming, backend development, and machine learning.",
+    "editorialSummary": [
+      "Computer Science Engineering student at Parul Institute of Engineering and Technology with a focus on building dependable software systems, RESTful backend services, and machine learning pipelines.",
+      "Driven by an engineering mindset that bridges theoretical foundations in data structures and object-oriented architecture with practical implementations in natural language processing and predictive intelligence.",
+      "Committed to clean code, systematic problem-solving, and continuous technical refinement across the modern software engineering lifecycle."
+    ],
+    "location": "Karad, Maharashtra, India",
+    "email": "rohitdesai6855@gmail.com",
+    "phone": "+91 9307383300",
+    "resumePath": "/assets/documents/resume.pdf",
+    "profileImagePath": "/assets/profile/rohit_desai.jpg",
+    "socialLinks": {
+      "github": "https://github.com/RohitDesai12",
+      "linkedin": "http://www.linkedin.com/in/rohit-desai-2005rd",
+      "email": "mailto:rohitdesai6855@gmail.com",
+      "phone": "tel:+919307383300",
+      "leetcode": "https://leetcode.com/u/RohitDesai12",
+      "geeksforgeeks": "https://www.geeksforgeeks.org/user/rohitdesai12/"
+    },
+    "academicHighlights": {
+      "degree": "B.Tech - Computer Science & Engineering",
+      "institution": "Parul Institute of Engineering and Technology, Vadodara",
+      "cgpa": "7.63",
+      "graduationYear": "2027",
+      "focusAreas": [
+        "Backend Architecture & REST APIs",
+        "Applied Machine Learning & NLP",
+        "Relational & Document Databases",
+        "Data Structures & OOP Principles"
+      ]
+    }
+  },
+  "siteConfig": {
+    "showAbout": true,
+    "showProjects": true,
+    "showSkills": true,
+    "showEducation": true,
+    "showCertifications": true,
+    "showAchievements": true,
+    "showContact": true,
+    "showAvailabilityBadge": false,
+    "availabilityText": "Open to software engineering and AI/ML opportunities"
+  },
+  "projects": [
+    {
+      "id": "ai-career-recommender",
+      "number": "01",
+      "title": "AI-Based Career Recommendation System",
+      "subtitle": "Intelligent Guidance & Resume Engineering Platform",
+      "timeline": "May 2026 – Oct 2026",
+      "shortDescription": "A comprehensive career platform integrating assessment-driven ML recommendations, skill roadmaps, job discovery, and an intelligent Resume Studio.",
+      "featured": true,
+      "technologies": [
+        "Python",
+        "NLP",
+        "Machine Learning",
+        "Node.js",
+        "Express.js",
+        "Flask",
+        "React.js"
+      ],
+      "keyFeatures": [
+        "Personalized career and skill recommendations generated via trained ML models",
+        "Dynamic career path roadmaps customized to individual assessment outcomes",
+        "Integrated 'Resume Studio' supporting multi-resume management and job-tailored optimization",
+        "Automated resume analysis and AI-assisted cover-letter synthesis",
+        "Unified frontend interface connecting assessment telemetry to backend inference APIs"
+      ],
+      "myContribution": [
+        "Developed NLP/ML-powered recommendation workflows and integrated model inference with backend APIs to generate personalized career and skill recommendations.",
+        "Engineered the core 'Resume Studio' subsystem supporting resume creation, multiple resume management, resume analysis, job-specific tailoring, and cover-letter generation.",
+        "Designed clean REST endpoints to connect user assessment inputs to ML inference pipelines."
+      ],
+      "caseStudy": {
+        "problem": "Students and early-career developers frequently encounter scattered career advice, lack visibility into specific industry skill gaps, and struggle to tailor their resumes effectively for distinct software engineering roles.",
+        "objective": "Architect a centralized platform that leverages machine learning and natural language processing to evaluate user competency profiles, suggest data-driven career paths, and streamline the resume creation and tailoring workflow.",
+        "technicalApproach": "Employed a modular architecture combining a Python ML service for text extraction, similarity scoring, and recommendation inference, paired with a Node.js/Express service handling user management, state persistence, and API orchestration.",
+        "implementationDetails": [
+          "Constructed NLP feature extraction pipelines to analyze skill keywords from candidate profiles and job role benchmarks.",
+          "Integrated model inference endpoints returning scored career recommendations and personalized curriculum roadmaps.",
+          "Built the Resume Studio workspace enabling side-by-side editing, ATS-friendly structuring, and job-description alignment.",
+          "Implemented secure RESTful API contracts between the React client and backend services."
+        ],
+        "contribution": [
+          "Spearheaded the development of NLP/ML-powered recommendation workflows and integrated model inference with backend APIs.",
+          "Designed and implemented Resume Studio with multi-resume management and automated tailoring capabilities.",
+          "Refined backend API response structures to ensure responsive client-side state updates."
+        ],
+        "challengesAndLearnings": [
+          "Handling diverse phrasing in user inputs and parsing unstructured resume text into standardized skill taxonomies.",
+          "Designing intuitive visual feedback while recommendation inference processes run in the background.",
+          "Deepened practical understanding of end-to-end ML integration within production web application architectures."
+        ]
+      },
+      "placeholderTheme": {
+        "accentColor": "#285943",
+        "diagramType": "neural-network"
+      },
+      "githubUrl": "",
+      "demoUrl": ""
+    },
+    {
+      "id": "ai-agri-closed-loop",
+      "number": "02",
+      "title": "AI-Driven Closed-Loop Agricultural Management System",
+      "subtitle": "Predictive Analytics & Environmental Telemetry Architecture",
+      "timeline": "Feb 2026 – Apr 2026",
+      "shortDescription": "An automated crop management system utilizing sensor telemetry preprocessing, machine learning predictions, and simulated IoT closed-loop feedback triggers.",
+      "featured": true,
+      "technologies": [
+        "Python",
+        "Machine Learning",
+        "Data Pipelines",
+        "IoT Simulation",
+        "Predictive Modeling",
+        "Flask"
+      ],
+      "keyFeatures": [
+        "Automated crop decision-support backend powered by predictive machine learning models",
+        "Telemetry preprocessing pipelines ingesting simulated environmental and soil sensor data",
+        "Yield estimation and crop condition forecasting algorithms",
+        "Simulated closed-loop feedback mechanisms triggering automated irrigation and nutrient adjustments",
+        "Modular data processing stages separating raw intake from model inference"
+      ],
+      "myContribution": [
+        "Developed a Python backend to automate crop management decisions using sensor data and machine learning predictions.",
+        "Built data pipelines to preprocess and feed agricultural inputs into trained models for yield and condition forecasting.",
+        "Implemented IoT-based workflow concepts to simulate real-time data intake and automated response triggers."
+      ],
+      "caseStudy": {
+        "problem": "Traditional agricultural resource allocation relies heavily on manual observation or post-facto measurement, leading to inefficient irrigation, late disease detection, and sub-optimal harvest yields.",
+        "objective": "Develop an automated Python decision-support system capable of processing multi-variable sensor inputs and utilizing predictive models to simulate a closed-loop crop advisory workflow.",
+        "technicalApproach": "Structured a data ingestion and inference pipeline that simulates real-time soil moisture, temperature, and nutrient telemetry, runs these inputs through trained regressors/classifiers, and emits actionable threshold-based recommendations.",
+        "implementationDetails": [
+          "Designed Python preprocessing routines for normalization, outlier handling, and sensor feature validation.",
+          "Implemented predictive inference routines forecasting crop condition indexes and expected yields.",
+          "Modeled simulated closed-loop actuators that respond autonomously when parameters deviate from target agronomic envelopes.",
+          "Encapsulated model scoring into clean modular interfaces suitable for automated batch or streaming execution."
+        ],
+        "contribution": [
+          "Engineered the core Python decision engine automating crop advisory outputs.",
+          "Designed the data preparation scripts converting multi-dimensional sensor metrics into model-ready tensors.",
+          "Formulated the simulated IoT feedback logic that issues programmatic response triggers."
+        ],
+        "challengesAndLearnings": [
+          "Calibrating simulated sensor variance to reflect realistic environmental noise and fluctuations.",
+          "Maintaining clear separation between conceptual/simulated hardware layers and production-grade software data processing.",
+          "Gained hands-on proficiency in building robust data pipelines and integrating predictive models into automated control architectures."
+        ]
+      },
+      "placeholderTheme": {
+        "accentColor": "#3B7A57",
+        "diagramType": "sensor-pipeline"
+      },
+      "githubUrl": "",
+      "demoUrl": ""
+    }
+  ],
+  "skills": [
+    {
+      "id": "programming-languages",
+      "categoryTitle": "Programming Languages",
+      "categoryDescription": "Core languages used for problem solving, backend systems, and scripting.",
+      "skills": [
+        {
+          "name": "Python",
+          "tag": "Primary"
+        },
+        {
+          "name": "Java",
+          "tag": "Core"
+        },
+        {
+          "name": "JavaScript",
+          "tag": "ES6+"
+        }
+      ]
+    },
+    {
+      "id": "backend-development",
+      "categoryTitle": "Backend Development",
+      "categoryDescription": "Server-side architectures, RESTful API design, and modular service patterns.",
+      "skills": [
+        {
+          "name": "Node.js"
+        },
+        {
+          "name": "Express.js"
+        },
+        {
+          "name": "Flask"
+        },
+        {
+          "name": "REST APIs"
+        },
+        {
+          "name": "MVC Architecture"
+        }
+      ]
+    },
+    {
+      "id": "frontend-development",
+      "categoryTitle": "Frontend Development",
+      "categoryDescription": "Modern component-driven web interfaces, state management, and styling.",
+      "skills": [
+        {
+          "name": "React.js"
+        },
+        {
+          "name": "HTML5"
+        },
+        {
+          "name": "CSS3"
+        },
+        {
+          "name": "Tailwind CSS"
+        }
+      ]
+    },
+    {
+      "id": "databases",
+      "categoryTitle": "Databases & Storage",
+      "categoryDescription": "Relational modeling, document storage, and persistent query design.",
+      "skills": [
+        {
+          "name": "MongoDB"
+        },
+        {
+          "name": "MySQL"
+        },
+        {
+          "name": "Database Design"
+        }
+      ]
+    },
+    {
+      "id": "tools-and-platforms",
+      "categoryTitle": "Tools & Platforms",
+      "categoryDescription": "Version control, development environments, and modern developer tooling.",
+      "skills": [
+        {
+          "name": "Git"
+        },
+        {
+          "name": "GitHub"
+        },
+        {
+          "name": "VS Code"
+        },
+        {
+          "name": "GitHub Copilot"
+        },
+        {
+          "name": "Amazon Q"
+        },
+        {
+          "name": "Antigravity"
+        },
+        {
+          "name": "Power BI"
+        }
+      ]
+    },
+    {
+      "id": "core-cs-fundamentals",
+      "categoryTitle": "Core Computer Science",
+      "categoryDescription": "Foundational theory, algorithmic problem solving, and intelligent systems.",
+      "skills": [
+        {
+          "name": "Data Structures & Algorithms"
+        },
+        {
+          "name": "Object-Oriented Programming (OOP)"
+        },
+        {
+          "name": "AI/ML Fundamentals"
+        },
+        {
+          "name": "Natural Language Processing (NLP)"
+        }
+      ]
+    }
+  ],
+  "education": [
+    {
+      "id": "btech-cse",
+      "degree": "B.Tech – Computer Science & Engineering",
+      "fieldOfStudy": "Computer Science and Applied Engineering",
+      "institution": "Parul Institute of Engineering and Technology",
+      "location": "Vadodara, Gujarat",
+      "duration": "2023 – 2027",
+      "scoreLabel": "CGPA",
+      "scoreValue": "7.63 / 10",
+      "highlights": [
+        "Rigorous coursework in Data Structures, Object-Oriented Programming, and Database Systems.",
+        "Hands-on technical explorations in applied Machine Learning and backend engineering.",
+        "Active participant in technical hackathons and competitive problem-solving."
+      ]
+    },
+    {
+      "id": "hsc-class-12",
+      "degree": "Higher Secondary Certificate (HSC – Class 12)",
+      "fieldOfStudy": "Science Stream",
+      "institution": "Ligade Patil Junior College",
+      "location": "Maharashtra",
+      "duration": "2021 – 2023",
+      "scoreLabel": "Percentage",
+      "scoreValue": "78%",
+      "highlights": [
+        "Focused on Physics, Chemistry, Mathematics, and Computer Science fundamentals."
+      ]
+    },
+    {
+      "id": "ssc-class-10",
+      "degree": "Secondary School Certificate (SSC – Class 10)",
+      "fieldOfStudy": "General Secondary Curriculum",
+      "institution": "Tarangan English School",
+      "location": "Maharashtra",
+      "duration": "Passed 2021",
+      "scoreLabel": "Percentage",
+      "scoreValue": "83%",
+      "highlights": [
+        "Consistent academic record with distinction across STEM subjects."
+      ]
+    }
+  ],
+  "certifications": [
+    {
+      "id": "cdac-ai-bootcamp",
+      "title": "AI Bootcamp",
+      "issuer": "C-DAC Pune / FutureSkills PRIME (Ministry of Electronics & IT, Government of India)",
+      "date": "Completed",
+      "certificatePdf": "/assets/certificates/cdac-ai-bootcamp.pdf",
+      "resultPdf": "/assets/certificates/cdac-ai-bootcamp-result.pdf",
+      "documents": [
+        {
+          "label": "Certificate of Completion",
+          "pdfPath": "/assets/certificates/cdac-ai-bootcamp.pdf"
+        },
+        {
+          "label": "Official Result & Grade Card",
+          "pdfPath": "/assets/certificates/cdac-ai-bootcamp-result.pdf"
+        }
+      ],
+      "hidden": false,
+      "notes": "Comprehensive government-backed AI & machine learning skilling initiative by NASSCOM. Includes verified certificate of completion and official grade transcript.",
+      "score": "94"
+    },
+    {
+      "id": "nptel-cn",
+      "title": "Computer Networks And Internet Protocol",
+      "issuer": "NPTEL (IIT Certification Program)",
+      "score": "60%",
+      "date": "Jan – Apr 2025",
+      "rollNo": "NPTEL25CS15S11564",
+      "certificatePdf": "/assets/certificates/nptel-computer-networks.pdf",
+      "documents": [
+        {
+          "label": "Official IIT Certificate",
+          "pdfPath": "/assets/certificates/nptel-computer-networks.pdf"
+        }
+      ],
+      "hidden": false,
+      "notes": "12-week rigorous IIT coursework covering OSI/TCP-IP models, packet routing, transport layers, and protocol design."
+    },
+    {
+      "id": "nptel-iot",
+      "title": "Introduction To Internet Of Things",
+      "issuer": "NPTEL (IIT Certification Program)",
+      "score": "75% (Elite)",
+      "date": "Jul – Oct 2026",
+      "rollNo": "NPTEL26CS161MANUAL0005837",
+      "certificatePdf": "/assets/certificates/nptel-iot.pdf",
+      "documents": [
+        {
+          "label": "Official IIT Elite Certificate",
+          "pdfPath": "/assets/certificates/nptel-iot.pdf"
+        }
+      ],
+      "hidden": false,
+      "notes": "12-week IIT certification covering sensing topologies, IoT networking protocols, edge/cloud integration, and telemetry pipelines."
+    }
+  ],
+  "achievements": [
+    {
+      "id": "pu-code-hackathon",
+      "title": "PU Code Hackathon 3.0 Participant",
+      "category": "Hackathon",
+      "organization": "Parul University",
+      "description": "Designed and engineered a functional prototype under rigorous competitive time constraints, collaborating on rapid problem definition and system implementation.",
+      "impactHighlight": "Delivered working end-to-end prototype within event timeframe."
+    },
+    {
+      "id": "govt-ai-simulations",
+      "title": "Government-Backed AI Training & Industry Simulations",
+      "category": "Technical Training",
+      "organization": "Ministry of Electronics & IT / FutureSkills PRIME",
+      "description": "Successfully completed industry-relevant computational simulations and rigorous technical assessments in artificial intelligence and applied data engineering while sustaining consistent academic coursework.",
+      "impactHighlight": "Recognized foundational proficiency in applied ML pipelines."
+    }
+  ],
+  "navigation": [
+    {
+      "label": "About",
+      "href": "#about",
+      "sectionId": "about"
+    },
+    {
+      "label": "Projects",
+      "href": "#projects",
+      "sectionId": "projects"
+    },
+    {
+      "label": "Skills",
+      "href": "#skills",
+      "sectionId": "skills"
+    },
+    {
+      "label": "Journey",
+      "href": "#journey",
+      "sectionId": "journey"
+    },
+    {
+      "label": "Certifications",
+      "href": "#certifications",
+      "sectionId": "certifications"
+    },
+    {
+      "label": "Contact",
+      "href": "#contact",
+      "sectionId": "contact"
+    }
+  ]
+}
