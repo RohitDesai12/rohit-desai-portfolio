@@ -27,6 +27,25 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     : (project.previewImage ? [project.previewImage] : []);
   const hasImages = projectImages.length > 0;
 
+  // Resolve dynamic architectural diagram labels
+  const diagramConfig = project.placeholderTheme?.diagramConfig || (
+    project.placeholderTheme?.diagramType === 'sensor-pipeline'
+      ? {
+          inputNode1: 'IoT Telemetry',
+          inputNode2: 'Sensor Intake',
+          centerLabel: 'Pipeline',
+          outputNode1: 'Forecasting',
+          outputNode2: 'Closed-Loop',
+        }
+      : {
+          inputNode1: 'Skill Assessment',
+          inputNode2: 'Resume Profile',
+          centerLabel: 'NLP / ML',
+          outputNode1: 'Roadmap',
+          outputNode2: 'Tailored CV',
+        }
+  );
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 36 }}
@@ -63,63 +82,37 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               </div>
             ) : (
               <div className="my-auto py-4 sm:py-6 flex flex-col items-center justify-center w-full overflow-x-hidden">
-                {project.placeholderTheme.diagramType === 'neural-network' ? (
-                  <div className="w-full max-w-sm flex items-center justify-between gap-1.5 sm:gap-2 px-1 sm:px-4 py-2 sm:py-6 font-mono text-[10px] sm:text-xs">
-                    <div className="space-y-2 sm:space-y-3 text-center min-w-0 flex-1">
+                <div className="w-full max-w-sm flex items-center justify-between gap-1.5 sm:gap-2 px-1 sm:px-4 py-2 sm:py-6 font-mono text-[10px] sm:text-xs">
+                  <div className="space-y-2 sm:space-y-3 text-center min-w-0 flex-1">
+                    <div className="px-1.5 sm:px-2.5 py-1 sm:py-1.5 bg-[#F7F7F2] border border-[#DDDFD8] shadow-xs truncate text-[10px] sm:text-xs">
+                      {diagramConfig.inputNode1 || 'Input Node'}
+                    </div>
+                    {diagramConfig.inputNode2 && (
                       <div className="px-1.5 sm:px-2.5 py-1 sm:py-1.5 bg-[#F7F7F2] border border-[#DDDFD8] shadow-xs truncate text-[10px] sm:text-xs">
-                        Skill Assessment
+                        {diagramConfig.inputNode2}
                       </div>
-                      <div className="px-1.5 sm:px-2.5 py-1 sm:py-1.5 bg-[#F7F7F2] border border-[#DDDFD8] shadow-xs truncate text-[10px] sm:text-xs">
-                        Resume Profile
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-center gap-0.5 sm:gap-1 text-[#285943] shrink-0 px-1">
-                      <span className="text-sm sm:text-base font-bold">→</span>
-                      <span className="text-[9px] sm:text-[10px] tracking-wider text-[#777D78] uppercase">
-                        NLP/ML
-                      </span>
-                      <span className="text-sm sm:text-base font-bold">→</span>
-                    </div>
-
-                    <div className="space-y-2 sm:space-y-3 text-center min-w-0 flex-1">
-                      <div className="px-1.5 sm:px-2.5 py-1 sm:py-1.5 bg-[#285943] text-[#F7F7F2] font-medium shadow-xs truncate text-[10px] sm:text-xs">
-                        Roadmap
-                      </div>
-                      <div className="px-1.5 sm:px-2.5 py-1 sm:py-1.5 bg-[#F7F7F2] border border-[#285943] text-[#285943] shadow-xs truncate text-[10px] sm:text-xs">
-                        Tailored CV
-                      </div>
-                    </div>
+                    )}
                   </div>
-                ) : (
-                  <div className="w-full max-w-sm flex items-center justify-between gap-1.5 sm:gap-2 px-1 sm:px-4 py-2 sm:py-6 font-mono text-[10px] sm:text-xs">
-                    <div className="space-y-2 sm:space-y-3 text-center min-w-0 flex-1">
-                      <div className="px-1.5 sm:px-2.5 py-1 sm:py-1.5 bg-[#F7F7F2] border border-[#DDDFD8] shadow-xs truncate text-[10px] sm:text-xs">
-                        IoT Telemetry
-                      </div>
-                      <div className="px-1.5 sm:px-2.5 py-1 sm:py-1.5 bg-[#F7F7F2] border border-[#DDDFD8] shadow-xs truncate text-[10px] sm:text-xs">
-                        Sensor Intake
-                      </div>
-                    </div>
 
-                    <div className="flex flex-col items-center gap-0.5 sm:gap-1 text-[#285943] shrink-0 px-1">
-                      <span className="text-sm sm:text-base font-bold">→</span>
-                      <span className="text-[9px] sm:text-[10px] tracking-wider text-[#777D78] uppercase">
-                        Pipeline
-                      </span>
-                      <span className="text-sm sm:text-base font-bold">→</span>
-                    </div>
-
-                    <div className="space-y-2 sm:space-y-3 text-center min-w-0 flex-1">
-                      <div className="px-1.5 sm:px-2.5 py-1 sm:py-1.5 bg-[#285943] text-[#F7F7F2] font-medium shadow-xs truncate text-[10px] sm:text-xs">
-                        Forecasting
-                      </div>
-                      <div className="px-1.5 sm:px-2.5 py-1 sm:py-1.5 bg-[#F7F7F2] border border-[#285943] text-[#285943] shadow-xs truncate text-[10px] sm:text-xs">
-                        Closed-Loop
-                      </div>
-                    </div>
+                  <div className="flex flex-col items-center gap-0.5 sm:gap-1 text-[#285943] shrink-0 px-1">
+                    <span className="text-sm sm:text-base font-bold">→</span>
+                    <span className="text-[9px] sm:text-[10px] tracking-wider text-[#777D78] uppercase truncate max-w-[85px]">
+                      {diagramConfig.centerLabel || 'FLOW'}
+                    </span>
+                    <span className="text-sm sm:text-base font-bold">→</span>
                   </div>
-                )}
+
+                  <div className="space-y-2 sm:space-y-3 text-center min-w-0 flex-1">
+                    <div className="px-1.5 sm:px-2.5 py-1 sm:py-1.5 bg-[#285943] text-[#F7F7F2] font-medium shadow-xs truncate text-[10px] sm:text-xs">
+                      {diagramConfig.outputNode1 || 'Output Node'}
+                    </div>
+                    {diagramConfig.outputNode2 && (
+                      <div className="px-1.5 sm:px-2.5 py-1 sm:py-1.5 bg-[#F7F7F2] border border-[#285943] text-[#285943] shadow-xs truncate text-[10px] sm:text-xs">
+                        {diagramConfig.outputNode2}
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
 

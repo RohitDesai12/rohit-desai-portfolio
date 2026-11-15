@@ -104,7 +104,15 @@
       },
       "githubUrl": "https://github.com/RohitDesai12/ai-career-recommendation-system",
       "demoUrl": "https://career-compass-pi-blush.vercel.app",
-      "previewImage": ""
+      "previewImage": "/assets/uploads/Screenshot_2026-11-15_195806_1794753044749_8419.png",
+      "images": [
+        "/assets/uploads/Screenshot_2026-11-15_195806_1794753044749_8419.png",
+        "/assets/uploads/Screenshot_2026-11-15_200303_1794753278580_7071.png",
+        "/assets/uploads/Screenshot_2026-11-15_200332_1794753278587_802.png",
+        "/assets/uploads/Screenshot_2026-11-15_200348_1794753278602_7810.png",
+        "/assets/uploads/Screenshot_2026-11-15_200401_1794753278604_6019.png",
+        "/assets/uploads/Screenshot_2026-11-15_200412_1794753286217_6448.png"
+      ]
     },
     {
       "id": "ai-agri-closed-loop",

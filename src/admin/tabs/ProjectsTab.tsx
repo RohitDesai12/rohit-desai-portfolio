@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, ArrowUp, ArrowDown, Save, X, CheckCircle2, AlertCircle, FileText, Upload, Image as ImageIcon } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
-import { ProjectItem } from '../../data/projects';
+import { ProjectItem, ProjectDiagramConfig } from '../../data/projects';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
 import { ConfirmModal } from '../components/ConfirmModal';
@@ -106,6 +106,83 @@ export const ProjectsTab: React.FC = () => {
     });
   };
 
+  const handleApplyDiagramPreset = (preset: 'ai' | 'iot' | 'web' | 'cloud') => {
+    if (!editingProject) return;
+    let config = {
+      inputNode1: 'Input Node 1',
+      inputNode2: 'Input Node 2',
+      centerLabel: 'FLOW',
+      outputNode1: 'Output Node 1',
+      outputNode2: 'Output Node 2',
+    };
+
+    if (preset === 'ai') {
+      config = {
+        inputNode1: 'Skill Assessment',
+        inputNode2: 'Resume Profile',
+        centerLabel: 'NLP / ML',
+        outputNode1: 'Roadmap',
+        outputNode2: 'Tailored CV',
+      };
+    } else if (preset === 'iot') {
+      config = {
+        inputNode1: 'IoT Telemetry',
+        inputNode2: 'Sensor Intake',
+        centerLabel: 'Pipeline',
+        outputNode1: 'Forecasting',
+        outputNode2: 'Closed-Loop',
+      };
+    } else if (preset === 'web') {
+      config = {
+        inputNode1: 'Client UI',
+        inputNode2: 'User Session',
+        centerLabel: 'REST / ORM',
+        outputNode1: 'PostgreSQL',
+        outputNode2: 'Cache / CDN',
+      };
+    } else if (preset === 'cloud') {
+      config = {
+        inputNode1: 'Git Push',
+        inputNode2: 'Docker Image',
+        centerLabel: 'CI / CD',
+        outputNode1: 'Kubernetes',
+        outputNode2: 'Monitoring',
+      };
+    }
+
+    setEditingProject({
+      ...editingProject,
+      placeholderTheme: {
+        ...editingProject.placeholderTheme,
+        diagramType: 'custom',
+        diagramConfig: config,
+      },
+    });
+  };
+
+  const activeDiagramConfig: ProjectDiagramConfig = editingProject?.placeholderTheme?.diagramConfig || {
+    inputNode1: editingProject?.placeholderTheme?.diagramType === 'sensor-pipeline' ? 'IoT Telemetry' : 'Skill Assessment',
+    inputNode2: editingProject?.placeholderTheme?.diagramType === 'sensor-pipeline' ? 'Sensor Intake' : 'Resume Profile',
+    centerLabel: editingProject?.placeholderTheme?.diagramType === 'sensor-pipeline' ? 'Pipeline' : 'NLP / ML',
+    outputNode1: editingProject?.placeholderTheme?.diagramType === 'sensor-pipeline' ? 'Forecasting' : 'Roadmap',
+    outputNode2: editingProject?.placeholderTheme?.diagramType === 'sensor-pipeline' ? 'Closed-Loop' : 'Tailored CV',
+  };
+
+  const updateDiagramField = (field: keyof ProjectDiagramConfig, value: string) => {
+    if (!editingProject) return;
+    setEditingProject({
+      ...editingProject,
+      placeholderTheme: {
+        ...editingProject.placeholderTheme,
+        diagramType: 'custom',
+        diagramConfig: {
+          ...activeDiagramConfig,
+          [field]: value,
+        },
+      },
+    });
+  };
+
   const handleOpenAdd = () => {
     const nextNumber = String(projectList.length + 1).padStart(2, '0');
     const newProj: ProjectItem = {
@@ -131,7 +208,14 @@ export const ProjectsTab: React.FC = () => {
       },
       placeholderTheme: {
         accentColor: '#285943',
-        diagramType: 'neural-network',
+        diagramType: 'custom',
+        diagramConfig: {
+          inputNode1: 'Client UI',
+          inputNode2: 'Data Store',
+          centerLabel: 'API / PIPELINE',
+          outputNode1: 'Service Out',
+          outputNode2: 'User Response',
+        },
       },
       githubUrl: '',
       demoUrl: '',
@@ -141,7 +225,29 @@ export const ProjectsTab: React.FC = () => {
   };
 
   const handleOpenEdit = (project: ProjectItem) => {
-    setEditingProject(JSON.parse(JSON.stringify(project)));
+    const clone: ProjectItem = JSON.parse(JSON.stringify(project));
+    if (!clone.placeholderTheme) {
+      clone.placeholderTheme = { accentColor: '#285943', diagramType: 'custom' };
+    }
+    if (!clone.placeholderTheme.diagramConfig) {
+      clone.placeholderTheme.diagramConfig =
+        clone.placeholderTheme.diagramType === 'sensor-pipeline'
+          ? {
+              inputNode1: 'IoT Telemetry',
+              inputNode2: 'Sensor Intake',
+              centerLabel: 'Pipeline',
+              outputNode1: 'Forecasting',
+              outputNode2: 'Closed-Loop',
+            }
+          : {
+              inputNode1: 'Skill Assessment',
+              inputNode2: 'Resume Profile',
+              centerLabel: 'NLP / ML',
+              outputNode1: 'Roadmap',
+              outputNode2: 'Tailored CV',
+            };
+    }
+    setEditingProject(clone);
     setIsNewProject(false);
   };
 
@@ -407,28 +513,6 @@ export const ProjectsTab: React.FC = () => {
                     className="w-full px-3 py-2 bg-[#F7F7F2] border border-[#DDDFD8] text-sm focus:border-[#285943] focus:outline-none font-mono"
                   />
                 </div>
-
-                <div>
-                  <label className="block text-xs font-mono uppercase text-[#202522] mb-1">
-                    Preview Diagram Motif
-                  </label>
-                  <select
-                    value={editingProject.placeholderTheme.diagramType}
-                    onChange={(e) =>
-                      setEditingProject({
-                        ...editingProject,
-                        placeholderTheme: {
-                          ...editingProject.placeholderTheme,
-                          diagramType: e.target.value as any,
-                        },
-                      })
-                    }
-                    className="w-full px-3 py-2 bg-[#F7F7F2] border border-[#DDDFD8] text-sm focus:border-[#285943] focus:outline-none"
-                  >
-                    <option value="neural-network">Neural Network / NLP Schema</option>
-                    <option value="sensor-pipeline">Sensor Pipeline / IoT Architecture</option>
-                  </select>
-                </div>
               </div>
 
               {/* Short Description */}
@@ -445,6 +529,29 @@ export const ProjectsTab: React.FC = () => {
                   required
                   className="w-full px-3 py-2 bg-[#F7F7F2] border border-[#DDDFD8] text-sm focus:border-[#285943] focus:outline-none leading-relaxed"
                 />
+              </div>
+
+              {/* Core Contribution Highlight */}
+              <div>
+                <label className="block text-xs font-mono uppercase text-[#202522] mb-1 font-semibold flex items-center gap-1.5">
+                  <CheckCircle2 size={14} className="text-[#285943]" />
+                  <span>Core Contribution (Featured Highlight on Project Card)</span>
+                </label>
+                <textarea
+                  rows={2}
+                  value={editingProject.myContribution?.[0] || ''}
+                  onChange={(e) =>
+                    setEditingProject({
+                      ...editingProject,
+                      myContribution: [e.target.value],
+                    })
+                  }
+                  placeholder="e.g. Developed NLP/ML-powered recommendation workflows and integrated model inference with backend APIs to generate personalized career and skill recommendations."
+                  className="w-full px-3 py-2 bg-[#F7F7F2] border border-[#DDDFD8] text-sm focus:border-[#285943] focus:outline-none leading-relaxed"
+                />
+                <p className="text-[11px] font-mono text-[#777D78] mt-1">
+                  This text appears directly inside the &ldquo;CORE CONTRIBUTION&rdquo; highlight card on the project preview.
+                </p>
               </div>
 
               {/* Technologies (comma separated or chip list) */}
@@ -625,6 +732,163 @@ export const ProjectsTab: React.FC = () => {
                     </div>
                   );
                 })()}
+              </div>
+
+              {/* Custom Architectural Schematic Diagram (Fallback Preview) */}
+              <div className="border border-[#DDDFD8] bg-[#F7F7F2] p-4 sm:p-5 space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#DDDFD8] pb-3">
+                  <div>
+                    <h4 className="font-mono text-xs uppercase text-[#285943] font-semibold">
+                      Architectural Schematic Diagram (Visual Motif)
+                    </h4>
+                    <p className="text-xs text-[#777D78] mt-0.5">
+                      Customize the node labels according to your specific project architecture. Shown whenever no screenshots are uploaded.
+                    </p>
+                  </div>
+
+                  {/* Preset quick-fill pills */}
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="text-[10px] font-mono uppercase text-[#777D78] mr-1">Quick Fill:</span>
+                    <button
+                      type="button"
+                      onClick={() => handleApplyDiagramPreset('ai')}
+                      className="px-2 py-1 bg-[#E8EEE8] hover:bg-[#285943] hover:text-[#F7F7F2] border border-[#DDDFD8] text-[10px] font-mono rounded-xs transition-colors cursor-pointer"
+                    >
+                      AI / ML
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleApplyDiagramPreset('iot')}
+                      className="px-2 py-1 bg-[#E8EEE8] hover:bg-[#285943] hover:text-[#F7F7F2] border border-[#DDDFD8] text-[10px] font-mono rounded-xs transition-colors cursor-pointer"
+                    >
+                      IoT / Sensor
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleApplyDiagramPreset('web')}
+                      className="px-2 py-1 bg-[#E8EEE8] hover:bg-[#285943] hover:text-[#F7F7F2] border border-[#DDDFD8] text-[10px] font-mono rounded-xs transition-colors cursor-pointer"
+                    >
+                      Web / REST
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleApplyDiagramPreset('cloud')}
+                      className="px-2 py-1 bg-[#E8EEE8] hover:bg-[#285943] hover:text-[#F7F7F2] border border-[#DDDFD8] text-[10px] font-mono rounded-xs transition-colors cursor-pointer"
+                    >
+                      Cloud / DevOps
+                    </button>
+                  </div>
+                </div>
+
+                {/* 5 Node Inputs */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-mono uppercase text-[#202522] mb-1">
+                      Left Top Node (Input 1)
+                    </label>
+                    <input
+                      type="text"
+                      value={activeDiagramConfig.inputNode1 || ''}
+                      onChange={(e) => updateDiagramField('inputNode1', e.target.value)}
+                      placeholder="e.g. Skill Assessment"
+                      className="w-full px-2.5 py-1.5 bg-[#F7F7F2] border border-[#DDDFD8] text-xs font-mono focus:border-[#285943] focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-mono uppercase text-[#202522] mb-1">
+                      Center Pipeline Label
+                    </label>
+                    <input
+                      type="text"
+                      value={activeDiagramConfig.centerLabel || ''}
+                      onChange={(e) => updateDiagramField('centerLabel', e.target.value)}
+                      placeholder="e.g. NLP / ML"
+                      className="w-full px-2.5 py-1.5 bg-[#F7F7F2] border border-[#DDDFD8] text-xs font-mono focus:border-[#285943] focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-mono uppercase text-[#202522] mb-1">
+                      Right Top Node (Output 1)
+                    </label>
+                    <input
+                      type="text"
+                      value={activeDiagramConfig.outputNode1 || ''}
+                      onChange={(e) => updateDiagramField('outputNode1', e.target.value)}
+                      placeholder="e.g. Roadmap"
+                      className="w-full px-2.5 py-1.5 bg-[#F7F7F2] border border-[#DDDFD8] text-xs font-mono focus:border-[#285943] focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-mono uppercase text-[#202522] mb-1">
+                      Left Bottom Node (Input 2 - Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={activeDiagramConfig.inputNode2 || ''}
+                      onChange={(e) => updateDiagramField('inputNode2', e.target.value)}
+                      placeholder="e.g. Resume Profile"
+                      className="w-full px-2.5 py-1.5 bg-[#F7F7F2] border border-[#DDDFD8] text-xs font-mono focus:border-[#285943] focus:outline-none"
+                    />
+                  </div>
+
+                  <div className="hidden lg:block" />
+
+                  <div>
+                    <label className="block text-[11px] font-mono uppercase text-[#202522] mb-1">
+                      Right Bottom Node (Output 2 - Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={activeDiagramConfig.outputNode2 || ''}
+                      onChange={(e) => updateDiagramField('outputNode2', e.target.value)}
+                      placeholder="e.g. Tailored CV"
+                      className="w-full px-2.5 py-1.5 bg-[#F7F7F2] border border-[#DDDFD8] text-xs font-mono focus:border-[#285943] focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                {/* Live Diagram Mini Preview */}
+                <div className="pt-2 border-t border-[#DDDFD8]">
+                  <span className="block text-[10px] font-mono uppercase text-[#777D78] mb-2">
+                    Live Diagram Preview (As rendered on homepage):
+                  </span>
+                  <div className="bg-[#E8EEE8] border border-[#DDDFD8] p-4 flex items-center justify-center max-w-md mx-auto">
+                    <div className="w-full flex items-center justify-between gap-2 font-mono text-xs">
+                      <div className="space-y-2 text-center min-w-0 flex-1">
+                        <div className="px-2 py-1 bg-[#F7F7F2] border border-[#DDDFD8] shadow-xs truncate text-[10px]">
+                          {activeDiagramConfig.inputNode1 || 'Input 1'}
+                        </div>
+                        {activeDiagramConfig.inputNode2 && (
+                          <div className="px-2 py-1 bg-[#F7F7F2] border border-[#DDDFD8] shadow-xs truncate text-[10px]">
+                            {activeDiagramConfig.inputNode2}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col items-center gap-0.5 text-[#285943] shrink-0 px-1">
+                        <span className="text-sm font-bold">→</span>
+                        <span className="text-[9px] tracking-wider text-[#777D78] uppercase truncate max-w-[70px]">
+                          {activeDiagramConfig.centerLabel || 'FLOW'}
+                        </span>
+                        <span className="text-sm font-bold">→</span>
+                      </div>
+
+                      <div className="space-y-2 text-center min-w-0 flex-1">
+                        <div className="px-2 py-1 bg-[#285943] text-[#F7F7F2] font-medium shadow-xs truncate text-[10px]">
+                          {activeDiagramConfig.outputNode1 || 'Output 1'}
+                        </div>
+                        {activeDiagramConfig.outputNode2 && (
+                          <div className="px-2 py-1 bg-[#F7F7F2] border border-[#285943] text-[#285943] shadow-xs truncate text-[10px]">
+                            {activeDiagramConfig.outputNode2}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* 8-Section Case Study Details */}

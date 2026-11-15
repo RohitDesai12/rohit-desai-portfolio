@@ -7,6 +7,20 @@ export interface CaseStudySection {
   challengesAndLearnings: string[];
 }
 
+export interface ProjectDiagramConfig {
+  inputNode1: string;
+  inputNode2?: string;
+  centerLabel: string;
+  outputNode1: string;
+  outputNode2?: string;
+}
+
+export interface ProjectPlaceholderTheme {
+  accentColor: string;
+  diagramType?: string;
+  diagramConfig?: ProjectDiagramConfig;
+}
+
 export interface ProjectItem {
   id: string;
   number: string;
@@ -21,10 +35,7 @@ export interface ProjectItem {
   caseStudy: CaseStudySection;
   previewImage?: string;
   images?: string[]; // Multiple screenshots (supports up to 10+ images with interactive carousel)
-  placeholderTheme: {
-    accentColor: string;
-    diagramType: "neural-network" | "sensor-pipeline";
-  };
+  placeholderTheme: ProjectPlaceholderTheme;
   githubUrl?: string; // Optional: Only rendered when valid URL provided
   demoUrl?: string;   // Optional: Only rendered when valid URL provided
 }
