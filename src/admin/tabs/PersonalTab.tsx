@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Save, Plus, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Save, Plus, Trash2, CheckCircle2, AlertCircle, FileText, ExternalLink, RotateCcw } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { PersonalData } from '../../data/personal';
 import { Button } from '../../components/common/Button';
+import { FileUploadInput } from '../components/FileUploadInput';
 
 export const PersonalTab: React.FC = () => {
   const { personal, updateSection } = usePortfolio();
@@ -203,6 +204,52 @@ export const PersonalTab: React.FC = () => {
             required
           />
         </div>
+      </div>
+
+      {/* Resume Document (PDF) Management */}
+      <div className="border border-[#DDDFD8] bg-[#F7F7F2] p-6 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#DDDFD8] pb-3">
+          <div className="flex items-center gap-2">
+            <FileText size={16} className="text-[#285943]" />
+            <h3 className="font-mono text-xs uppercase text-[#285943] font-semibold">
+              Resume Document (PDF)
+            </h3>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {formData.resumePath && (
+              <a
+                href={formData.resumePath}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-mono text-[#285943] hover:underline flex items-center gap-1 font-semibold"
+              >
+                <span>View Active Resume</span>
+                <ExternalLink size={12} />
+              </a>
+            )}
+
+            {formData.resumePath !== '/assets/documents/resume.pdf' && (
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, resumePath: '/assets/documents/resume.pdf' })}
+                className="text-xs font-mono text-[#777D78] hover:text-[#202522] flex items-center gap-1"
+                title="Reset to default resume"
+              >
+                <RotateCcw size={12} />
+                <span>Reset Default</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        <FileUploadInput
+          label="Active Resume File (PDF)"
+          value={formData.resumePath || '/assets/documents/resume.pdf'}
+          accept=".pdf,application/pdf"
+          onChange={(newPath) => setFormData({ ...formData, resumePath: newPath })}
+          helperText="Upload your latest resume PDF here. Once saved, this file will be automatically served whenever visitors click 'Resume' or 'Download Resume' across the entire portfolio."
+        />
       </div>
 
       {/* Contact & Social Handles */}
