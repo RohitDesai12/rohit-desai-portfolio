@@ -18,30 +18,36 @@ export const ProjectImageCarousel: React.FC<ProjectImageCarouselProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [isHovered, setIsHovered] = useState(false);
+  const [failedIndices, setFailedIndices] = useState<number[]>([]);
   const touchStartX = useRef<number | null>(null);
+
+  // Filter out any broken images
+  const validImages = images.filter((_, idx) => !failedIndices.includes(idx));
 
   // Auto-play effect: changes image automatically every 3.5s, pauses when user hovers
   useEffect(() => {
-    if (images.length <= 1 || isHovered) return;
+    if (validImages.length <= 1 || isHovered) return;
 
     const timer = setInterval(() => {
       setDirection(1);
-      setCurrentIndex((prev) => (prev + 1) % images.length);
+      setCurrentIndex((prev) => (prev + 1) % validImages.length);
     }, autoPlayInterval);
 
     return () => clearInterval(timer);
-  }, [images.length, isHovered, autoPlayInterval]);
+  }, [validImages.length, isHovered, autoPlayInterval]);
 
   const handleNext = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
+    if (validImages.length === 0) return;
     setDirection(1);
-    setCurrentIndex((prev) => (prev + 1) % images.length);
+    setCurrentIndex((prev) => (prev + 1) % validImages.length);
   };
 
   const handlePrev = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
+    if (validImages.length === 0) return;
     setDirection(-1);
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+    setCurrentIndex((prev) => (prev - 1 + validImages.length) % validImages.length);
   };
 
   const handleSelectDot = (idx: number, e: React.MouseEvent) => {
@@ -55,7 +61,7 @@ export const ProjectImageCarousel: React.FC<ProjectImageCarouselProps> = ({
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return;
+    if (touchStartX.current === null || validImages.length === 0) return;
     const diff = touchStartX.current - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 40) {
       if (diff > 0) handleNext();
@@ -64,7 +70,10 @@ export const ProjectImageCarousel: React.FC<ProjectImageCarouselProps> = ({
     touchStartX.current = null;
   };
 
-  if (!images || images.length === 0) return null;
+  // If no valid images could be loaded, return null so parent displays the schematic diagram
+  if (!images || images.length === 0 || validImages.length === 0) return null;
+
+  const currentImageUrl = validImages[currentIndex] || validImages[0];
 
   return (
     <div
@@ -78,8 +87,8 @@ export const ProjectImageCarousel: React.FC<ProjectImageCarouselProps> = ({
       <div className="relative w-full h-[200px] sm:h-[230px] md:h-[240px] flex items-center justify-center overflow-hidden bg-[#202522]/5">
         <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.img
-            key={currentIndex}
-            src={images[currentIndex]}
+            key={currentImageUrl}
+            src={currentImageUrl}
             alt={`${projectTitle} screenshot ${currentIndex + 1}`}
             initial={{ opacity: 0, x: direction * 35 }}
             animate={{ opacity: 1, x: 0 }}
@@ -87,12 +96,18 @@ export const ProjectImageCarousel: React.FC<ProjectImageCarouselProps> = ({
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="w-full h-full object-contain border border-[#DDDFD8] shadow-xs"
             loading="lazy"
+            onError={() => {
+              const originalIndex = images.indexOf(currentImageUrl);
+              if (originalIndex !== -1) {
+                setFailedIndices((prev) => [...prev, originalIndex]);
+              }
+            }}
           />
         </AnimatePresence>
       </div>
 
       {/* Navigation Arrows (Rendered when more than 1 image) */}
-      {images.length > 1 && (
+      {validImages.length > 1 && (
         <>
           <button
             type="button"
@@ -115,10 +130,10 @@ export const ProjectImageCarousel: React.FC<ProjectImageCarouselProps> = ({
       )}
 
       {/* Progress Pill / Counter */}
-      {images.length > 1 && (
+      {validImages.length > 1 && (
         <div className="absolute bottom-2 left-0 right-0 flex items-center justify-center gap-1 z-10 pointer-events-auto">
           <div className="flex items-center gap-1.5 bg-[#202522]/75 backdrop-blur-xs px-2.5 py-1 rounded-full border border-white/10">
-            {images.map((_, idx) => (
+            {validImages.map((_, idx) => (
               <button
                 key={idx}
                 type="button"
@@ -132,7 +147,7 @@ export const ProjectImageCarousel: React.FC<ProjectImageCarouselProps> = ({
               />
             ))}
             <span className="font-mono text-[9px] text-[#F7F7F2] ml-1">
-              {currentIndex + 1}/{images.length}
+              {currentIndex + 1}/{validImages.length}
             </span>
           </div>
         </div>
