@@ -216,6 +216,26 @@ app.post('/api/upload-multiple', requireAuth, upload.array('files', 15), (req: R
   });
 });
 
+// Serve public static assets (certificates, documents, etc.)
+const publicDir = path.join(__dirname, '..', 'public');
+if (fs.existsSync(publicDir)) {
+  app.use(express.static(publicDir));
+}
+
+// In production, serve the built Vite frontend from dist/
+const distDir = path.join(__dirname, '..', 'dist');
+if (fs.existsSync(distDir)) {
+  app.use(express.static(distDir));
+  // Catch-all route to serve index.html for client-side routing
+  app.use((req: Request, res: Response) => {
+    if (req.path.startsWith('/api')) {
+      res.status(404).json({ error: 'API endpoint not found' });
+      return;
+    }
+    res.sendFile(path.join(distDir, 'index.html'));
+  });
+}
+
 app.listen(PORT, () => {
   console.log(`Portfolio Admin Backend listening on http://localhost:${PORT}`);
 });
